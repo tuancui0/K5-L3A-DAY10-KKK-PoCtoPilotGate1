@@ -216,13 +216,13 @@ Với tỷ lệ chuyển người hiện tại, stress trung bình cần khoản
 | Bằng chứng 2 | Prepared hoàn sai/lỗi oan/PII đều 0; baseline trước đó 20.000đ và 1 lỗi oan |
 | Bằng chứng 3 | Prepared 4.202đ <=8.000, ROI 1,38 >=0,3, 0 ca ùn, chờ 0 phút; không dòng vượt trần |
 | Phân khúc xấu nhất | Kho xác định DN đắt nhất 4.586đ/ticket; nhóm ? là 10.359đ, hơn làm tay. Chỉ nhìn nhóm ? thì chưa đủ cơ sở kinh tế để tự động hoá, phải xác minh định danh và đo riêng |
-| Quyết định v1 | CHƯA KÝ QUYẾT ĐỊNH MỞ PILOT. Đủ cơ sở đi tiếp kiểm thử sự cố, chưa đủ bằng chứng chọn Tiếp tục theo rule đã ký |
-| Dòng rule | Tiếp tục yêu cầu bộ nền VÀ gói sự cố đạt, hiện mới có bộ nền. Thu hẹp yêu cầu chất lượng/kinh tế/hàng chờ chưa đạt, nhưng tổng bộ nền đều đạt. Cải tiến thêm yêu cầu đúng 1 chỉ số an toàn chưa đạt, thực tế 0. Dừng yêu cầu >=2 an toàn chưa đạt sau sửa hoặc chi phí >10.000 sau thu hẹp, chưa xảy ra |
-| Điểm cần giải quyết | Rule chưa bao phủ trạng thái bộ nền đạt nhưng chưa nhận thẻ. Nhóm/Lab Coach cần xác nhận cách ghi v1; không tự sửa JSON hay ghi gói sự cố đạt khi chưa đo |
-| Bằng chứng còn thiếu | Thẻ sự cố, test ẩn, diễn tập cao điểm, cảnh báo thật; Phiếu A vẫn còn mẫu từ trước Khối 2 |
-| Xem lại | Sau khi nhận đúng thẻ và đo prepared; chưa có giờ phát thẻ xác nhận |
-| PIC đề xuất | Vũ Quang Dũng phối hợp Phạm Tuấn Anh; chưa có chữ ký cá nhân |
+| Quyết định v1 | **Tiếp tục**, nhưng chỉ sang vòng sự cố trong mô phỏng, chưa mở cho khách thật. Bộ nền ở mốc prepared đạt cả 5 chỉ số bắt buộc, chi phí 4.202đ ≤ 8.000đ, ROI 1,38 ≥ 0,3, 0 ca ùn, không dòng vượt trần |
+| Dòng rule | Khớp dòng **Tiếp tục** trên phần đã đo được, tức bộ nền: đủ 5 chỉ số bắt buộc, chi phí, ROI, hàng chờ, không vượt trần. Vế "VÀ trên gói sự cố" chưa đo được ở v1 vì chưa phát thẻ; bàn kiểm vế này ở v2 (Phiếu C mục C12). Ba dòng còn lại không khớp: Thu hẹp cần chất lượng/kinh tế/hàng chờ chưa đạt, nhưng bộ nền đều đạt; Cải tiến thêm cần đúng 1 chỉ số an toàn chưa đạt, thực tế 0; Dừng cần ≥ 2 chỉ số an toàn chưa đạt sau sửa, hoặc chi phí > 10.000đ sau thu hẹp, chưa xảy ra |
+| Điểm cần giải quyết | Rule đã ký không có dòng riêng cho trạng thái "bộ nền đạt, chưa nhận thẻ". Bàn đọc vế còn thiếu là điều kiện phải đạt ở v2 để giữ Tiếp tục, không phải lý do chọn dòng khác. Không sửa JSON đã ký, không ghi gói sự cố đạt khi chưa đo |
+| Bằng chứng còn thiếu | Thẻ sự cố, test ẩn, diễn tập cao điểm, cảnh báo thật |
+| Xem lại | Ở v2, sau khi nhận thẻ và đo prepared, after trên gói sự cố (Phiếu C mục C12) |
+| PIC ký | Vũ Quang Dũng (Sản phẩm và kinh doanh), phối hợp Phạm Tuấn Anh (Vận hành và pháp lý) |
 
-Ghi chú: checkout Windows đổi CRLF làm sai hash. Đã khôi phục đúng byte LF của tiêu chí từ commit ký, khớp lock cũ; không thay ngưỡng/timestamp/ký lại. File khóa khác chỉ phục hồi LF khi khớp MANIFEST. Thiếu 32 file thẻ S1–S8, chưa thể xác nhận integrity toàn gói sự cố.
+Ghi chú: checkout Windows đổi CRLF làm sai hash. Đã khôi phục đúng byte LF của tiêu chí từ commit ký, khớp lock cũ; không thay ngưỡng/timestamp/ký lại. File khóa khác chỉ phục hồi LF khi khớp MANIFEST. Sau khi kéo đủ 32 file thẻ S1–S8, grade `R-S8-grade-20261118-185843-d6d69c` báo integrity ✅.
 
-Chưa commit/push quyết định v1 vì còn điểm ở B8. Nhóm cần ghi việc dùng AI trong mục cá nhân TEAM.md theo RULES.md; không viết thay đóng góp/exit ticket của thành viên.
+Quyết định v1 khớp `decision_v1` trong `submission/submission.json`.

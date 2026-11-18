@@ -107,13 +107,17 @@ Vai **Sản phẩm và kinh doanh**.
 - Điền các con số kinh doanh trong `config/operating_gates.json`: trần hoàn ngày 1.800.000đ, ngân sách chi phí mỗi ticket 900đ, pilot_scope 100%, ROI tối thiểu 0.3.
 - Phân tích tác động kinh doanh của sự cố S8: khi nhân viên CSKH mất niềm tin và kiểm tay 100%, chi phí mỗi ticket vọt lên 11.225đ (đắt hơn làm tay 10.000đ), làm toàn bộ dự án bị âm ROI (-2.45) và xuất hiện 36 ca ùn.
 - Phân tích và đối chiếu mốc after sau khi bật `decision_note: true` và `review_sampling_pct: 10`: chi phí giảm xuống 2.952đ/ticket, ROI vọt lên 2.39, tiết kiệm ròng 366.479đ/ngày, 0 kho nào đắt hơn làm tay.
+- Ký quyết định Gate 1 v1 ở Phiếu B mục B8: **Tiếp tục**, chỉ sang vòng sự cố, chưa mở cho khách thật. Bằng chứng là bộ nền prepared đạt cả 5 chỉ số, chi phí 4.202đ, ROI 1,38, 0 ca ùn. Vế "gói sự cố" của dòng Tiếp tục để lại cho v2 kiểm.
 - Hoàn thiện lập luận quyết định Gate 1 v2 chọn **Tiếp tục** mở pilot do toàn bộ tiêu chí đã ký và các trần kinh tế/vận hành đều đạt.
+- Thống nhất mã lần chạy trong C12 theo bộ nộp (`submission/runs/`) và điền phân khúc xấu nhất (kho DN, 3.200đ/ticket ở after).
 
 ### Bằng chứng
 
 - File cấu hình: `config/acceptance_criteria.json` (commit ký `4856d0b`), `config/operating_gates.json`.
-- Báo cáo mốc after `R-S8-after-20261118-172351-d6d69c`: chi phí 2.952đ <= 8.000đ, ROI 2.39 >= 0.3, tiết kiệm ròng 366.479đ/ngày.
+- Bộ nền vòng 1: base `R-base-before-20261118-151326-bde05c`, prepared `R-base-prepared-20261118-151855-6053af` (Phiếu B mục B8).
+- Gói S8: after `R-S8-after-20261118-185846-d6d69c`, grade `R-S8-grade-20261118-185843-d6d69c`. Chi phí 2.952đ ≤ 8.000đ, ROI 2,39 ≥ 0,3, tiết kiệm ròng 366.479đ/ngày.
 - Phiếu A: mục A1–A4; Phiếu B: mục B3, B7.4, B8; Phiếu C: mục C12.
+- Dùng AI (Claude Code) để đọc report, đối chiếu số giữa report và Phiếu B, C, `submission.json`, và soát câu chữ B8, C12. Các ngưỡng, con số trong config và quyết định v1, v2 là của bàn.
 
 ### Exit ticket
 

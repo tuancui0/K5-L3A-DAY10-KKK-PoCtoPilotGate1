@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m lab10.trace --suite S8 --stage after --ticket S8-04 --seed 11)",
+      "Bash(python -m lab10.trace --suite S8 --stage after --ticket S8-05 --seed 11)",
+      "Bash(python -m unittest discover -s tests -q)",
+      "Bash(export PYTHONIOENCODING=utf-8)",
+      "Bash(python -m lab10.grade --incident S8)",
+      "Bash(python -I -)",
+      "Bash(git ls-tree *)",
+      "Bash(python -m lab10.checkpoint verify)",
+      "Bash(git diff *)",
+      "Bash(git config *)",
+      "Bash(git stash *)",
+      "Bash(git fetch *)",
+      "Bash(git rev-list *)",
+      "Bash(git ls-remote *)"
+    ],
+    "defaultMode": "bypassPermissions"
+  }
+}
