@@ -19,7 +19,25 @@ def escalation_rate(trials):
     return sum(t["status"] == "escalated" for t in trials) / max(1, len(trials))
 
 
+def approval_invalid_attempt_rate(trials):
+    """Tỷ lệ ticket có đề xuất dùng phê duyệt không hợp lệ, không dùng nhãn."""
+    return sum(any(e.get("event") == "approval_invalid_attempt"
+                   or e.get("type") == "approval_invalid_attempt"
+                   for e in t.get("events", [])) for t in trials) / max(1, len(trials))
+
+
+def manual_recheck_rate(trials):
+    return sum(t.get("review_kind") == "recheck" for t in trials) / max(1, len(trials))
+
+
+def queue_wait_max_minutes(trials):
+    return max((t.get("queue_wait_min") or 0 for t in trials), default=0)
+
+
 MONITORS = {
+    "approval_invalid_attempt_rate": approval_invalid_attempt_rate,
+    "manual_recheck_rate": manual_recheck_rate,
+    "queue_wait_max_minutes": queue_wait_max_minutes,
     "escalation_rate": escalation_rate,     # có sẵn; KHÔNG tính là metric mới của đội
 }
 STARTER_MONITORS = ("escalation_rate",)
