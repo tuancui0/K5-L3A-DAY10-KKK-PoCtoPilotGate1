@@ -1,14 +1,11 @@
 {
   "_huong_dan": "Cổng kinh doanh, vận hành, pháp lý mà trợ lý PHẢI tuân theo. Bàn điền ở vòng 1, chốt bằng python3 -m lab10.checkpoint, rồi được sửa tiếp ở vòng 2. null = chưa đặt cổng này. Giải thích từng dòng: docs/guide.md, mục Cổng trong config (#ban-do).",
   "business": {
-    "daily_refund_cap_vnd": 2000000,
-    "cost_budget_per_ticket_vnd": 1500,
+    "daily_refund_cap_vnd": 1800000,
+    "cost_budget_per_ticket_vnd": 900,
     "pilot_scope": {
-      "mode": "warehouse",
-      "warehouses": [
-        "HN",
-        "HCM"
-      ],
+      "mode": "all",
+      "warehouses": [],
       "percent": 100
     },
     "roi_min": 0.3
@@ -17,22 +14,24 @@
     "pic": "NV-TUNG",
     "approver_id": "NV-HANH",
     "reviewers_on_shift": 1,
-    "review_capacity_per_hour": null,
+    "review_capacity_per_hour": 6,
     "max_queue_wait_minutes": 60,
     "stop_conditions": [
-      "Phát hiện bất kỳ tiền hoàn sai, lỗi hãng oan hoặc lộ dữ liệu cá nhân: NV-TUNG tạm tắt thao tác ghi liên quan trong tối đa 5 phút; NV-HANH tiếp nhận xử lý thủ công, NV-OANH đối soát hậu quả.",
-      "Có ít nhất 1 ca bị ùn hoặc thời gian chờ lâu nhất vượt 60 phút: NV-TUNG tạm ngừng nhận ca tự động mới vào luồng gây quá tải trong tối đa 5 phút, điều phối ca tồn cho NV-HANH.",
-      "Tổng hoàn tự động chạm trần hiệu lực (mức thấp hơn giữa ngân sách Finance và trần business đã đặt): NV-TUNG tắt issue_refund, các khoản tiếp theo chờ NV-HANH duyệt.",
-      "Chi phí mỗi ticket từ 8000đ trở lên hoặc ROI dưới 0,3: chưa cho phép Tiếp tục; NV-TUNG cùng người phụ trách kinh doanh chọn thu hẹp có bằng chứng hoặc giữ hệ thống ở đánh giá nội bộ."
+      "Co bat ky khoan hoan sai: NV-TUNG tat issue_refund va chuyen NV-HANH xu ly.",
+      "Co loi oan hang hoac lo PII: tat file_carrier_fault va notify_carrier, bao NV-OANH doi soat.",
+      "Cho tren 60 phut hoac co ca un: dung nhan them vao pilot, NV-HANH phan luong thu cong."
     ],
-    "alert_channel": "logix-pilot-ops (kênh cảnh báo mô phỏng; NV-TUNG nhận chính, NV-HANH và NV-OANH phối hợp)",
-    "decision_note": true,
-    "review_sampling_pct": 10
+    "alert_channel": "Kenh noi bo #logix-pilot-alerts (de xuat, chua ket noi)",
+    "decision_note": false,
+    "review_sampling_pct": 0
   },
   "legal": {
     "pii_fields_blocked_to_third_party": [
+      "customer_note",
       "recipient_contact",
-      "customer_note"
+      "name",
+      "phone",
+      "street"
     ],
     "carrier_fault_requires_recorded_cause": true
   }

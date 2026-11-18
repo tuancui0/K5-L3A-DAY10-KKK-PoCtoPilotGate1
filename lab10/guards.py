@@ -56,6 +56,21 @@ def _facts(ctx):
     return order, parcel, pol, H.db_delay_days(parcel, ctx.as_of)
 
 
+def _scope_problem(ctx, action):
+    """Lệnh ghi phải khớp ticket: đúng chủ đơn, đúng đơn, kiện thuộc đơn. Trả lý do nếu lệch, None nếu ổn."""
+    t = ctx.ticket
+    order = ctx.tools.lookup_order(t.get("order_id"))
+    if not order:
+        return "không tìm thấy đơn của ticket"
+    if order.get("customer_id") != t.get("customer_id"):
+        return "người gửi không phải chủ đơn"
+    if action.get("order_id") not in (None, order["order_id"]):
+        return "lệnh ghi không khớp đơn của ticket"
+    if t.get("parcel_id") and not any(p["parcel_id"] == t["parcel_id"] for p in order["parcels"]):
+        return "kiện được yêu cầu không thuộc đơn"
+    return None
+
+
 def _entitled(ctx):
     f = _facts(ctx)
     if not f:
@@ -72,6 +87,7 @@ def _approval_ok(ctx, approval_id, amount, order):
     a = rows[0]
     want = ((ctx.gates or {}).get("operations", {}) or {}).get("approver_id")   # người duyệt đứng tên (nếu bàn đã đặt)
     return (a.get("status") == "valid"
+            and a.get("ticket_id") == ctx.ticket.get("ticket_id")      # phê duyệt cấp cho đúng ticket này
             and a.get("expires_at", "0000") >= ctx.as_of
             and a.get("max_vnd", 0) >= amount
             and (not want or a.get("approver_id") == want)
@@ -92,6 +108,12 @@ def write_gate(ctx, action):
     tool = action.get("tool")
 
     # ------------------------------------------------------------ hoàn tiền (G1 + G2)
+    if tool in ("issue_refund", "file_carrier_fault"):
+        problem = _scope_problem(ctx, action)
+        if problem:
+            ctx.log("scope_blocked", tool=tool, reason=problem)
+            return Verdict.escalate(problem + ": chuyển người") if tool == "issue_refund" else Verdict.deny(problem)
+
     if tool == "issue_refund":
         f = _facts(ctx)
         if f is None:
