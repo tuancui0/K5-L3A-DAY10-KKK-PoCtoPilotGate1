@@ -128,6 +128,8 @@ Dòng 5, 7, 8, 9 cần chuyển thành risk register ở C10 khi nhận thẻ.
 
 Bằng chứng R-base-after-20261118-151822-1f6d2b và R-base-after-20261118-151848-6053af: 110/110, không hỏng ca cũ; 13 unittest qua. Giới hạn: chống hoàn lặp theo đơn là bảo thủ, chưa hỗ trợ nhiều khoản hoàn từng phần hợp lệ; DB sai vẫn cần xác minh ngoài hệ thống.
 
+**Mở rộng ở `lab10/guards.py` hiện tại (vòng 2, không đổi bản chụp `guards_round1.py`):** giữ ba cổng trên và thêm: phê duyệt phải gắn đúng ticket; chặn lệnh ghi khi người gửi không phải chủ đơn, lệnh không khớp đơn hoặc kiện không thuộc đơn; trần hoàn tự động 300.000đ/khách/ngày và 2.000.000đ/ngày theo `ops_limits`; chuyển người khi hãng đã đủ 2 lỗi trong ngày (kiểm TRƯỚC khi ghi tiền); `send_reply` ép số tiền khớp sổ cái.
+
 ### B7.2 · Tránh rò rỉ dữ liệu đánh giá
 
 1. Giữ nguyên nhãn/file đánh giá; cổng theo dữ kiện và chính sách, không theo ID ticket, seed hoặc câu chữ. Ghi lịch sử và chốt prepared trước khi biết thẻ.

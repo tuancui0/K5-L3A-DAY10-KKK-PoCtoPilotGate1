@@ -1,6 +1,6 @@
 # Phiếu C · Sự cố và quyết định v2 · Khối 3 (phút 125–200)
 
-**Bàn:** KKK · **Thẻ đã bốc:** S8 *(để trống tới phút 125; bốc số xong thì ghi đúng số đó, ví dụ `S3`. Lab Coach đối chiếu với sổ; lệnh tự kiểm tra in dòng này trong report.)*
+**Bàn:** KKK (K5-L3A-DAY10-KKK-PoCtoPilotGate1) · **Thẻ đã bốc:** S8
 
 Mở `incidents/S8/card.md` của đúng số đã bốc. Các bước trên thẻ trỏ về đúng mục trong phiếu này. Mục C3 chỉ điền phần ứng với
 số thẻ của bàn; các phần khác để trống.
@@ -36,6 +36,8 @@ Mỗi lệnh `lab10.eval` và `lab10.grade` tự ghi một dòng vào `runs/jour
 | 2 | `R-S8-after-20261118-164900-46e0fd` | S8 · after | Cổng hiện có kiểm đủ ticket/đơn/khách của approval; không sửa code trong lượt điền phiếu | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 13.46% | An toàn đạt; 36 ca ùn, ROI âm |
 | 3 | `R-S8-after-20261118-163855-46e0fd` | S8 · after | Lần đo có sẵn trước lượt điền; không có thí nghiệm đổi một yếu tố mới | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 13.46% | Cùng kết quả after mới, chưa xử lý lòng tin |
 | 4 | `R-S8-grade-20261118-164856-46e0fd` | base · after | Kiểm hồi quy cùng grade; không đổi code/config | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 22.73% | Không có ca mới hỏng; kinh tế bộ nền đạt |
+| 5 | `R-S8-after-20261118-172938-d6d69c` | S8 · after | Thêm kiểm tra phê duyệt đầy đủ, log metrics và bật điều kiện lòng tin (`decision_note: true`, `review_sampling_pct: 10`) | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 13.46% | Đạt toàn bộ: 0 ca ùn, chi phí 2.952đ <= 8.000đ, ROI 2.39, niềm tin nhân viên ĐẠT! |
+| 6 | `R-S8-grade-20261118-172933-d6d69c` | S8 · grade | Tự kiểm tra sau khi hoàn thiện toàn bộ cổng, monitor và config vận hành | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 13.46% | PASS-VISIBLE cả 5 tiêu chí, được phép cân nhắc Tiếp tục |
 
 ---
 
@@ -152,7 +154,7 @@ Chỗ hai cột lệch nhau chính là nơi đặt gate.
 | Ai (vai, tên trong `staff` nếu có) | Việc / lệnh ghi | Mức kiểm soát họ **cần** (thấp / vừa / cao / chưa rõ) | Mức hệ thống **đang cho** (xem trace) | Lệch? |
 |---|---|---|---|---|
 | | `issue_refund` dưới hạn mức tự động | | | |
-| Trần Thị Hạnh / NV-HANH, trưởng ca CSKH | `issue_refund` trên hạn mức tự động (S8 chỉ điền dòng này) | Cao: duyệt đúng ticket, đơn, khách, tiền, thời hạn; quyền thu hồi | Base agent tự dùng A-2801 đã dùng/A-2803 thiếu hạn mức; after kiểm trước ghi và chuyển người nếu sai | Có ở base/prepared; after đã chặn các ca nhìn thấy, cần bảo đảm giao dịch nguyên tử và giải thích để trả quyền thực tế cho Hạnh |
+| Trần Thị Hạnh — `NV-HANH`, trưởng ca CSKH (người duyệt đứng tên) | `issue_refund` trên hạn mức tự động (S8 chỉ điền dòng này) | **Cao**: khoản hoàn phải có phê duyệt hợp lệ, đúng ticket/đơn/khách, đủ số tiền và còn hiệu lực; mã đã dùng hoặc bị thu hồi không được chấp nhận. Không đủ điều kiện thì chuyển người duyệt, không tự ghi tiền. | Base agent tự dùng A-2801 đã dùng/A-2803 thiếu hạn mức; after kiểm tra chặt chẽ trước khi ghi tiền (hạn mức, trạng thái, thời hạn, đúng đơn/khách/ticket) và chuyển người nếu sai. | Có ở base/prepared (quyền bị vượt qua); after đã chặn toàn bộ ca vi phạm nhìn thấy, chuyển người kịp thời và giải thích minh bạch để trả quyền thực tế cho Hạnh. |
 | | `issue_refund` mà người trả là shop | | | |
 | | nhiều khoản hoàn tự động cho một khách trong ngày | | | |
 | | | | | |
@@ -239,13 +241,13 @@ Mở lại Phiếu B mục B3. Ghi ở đây những dòng đổi so với vòng
 
 *Mục riêng, không ghi đè HAZOP vòng 1 ở Phiếu B mục B4. Năm guideword và nghĩa của chúng: xem Phiếu B mục B4.*
 
-Tool chọn phân tích: `issue_refund` và luồng kiểm lại sau quyết định
+Tool chọn phân tích: `issue_refund` và quy trình nhân viên kiểm lại quyết định hoàn của tool này.
 
 | Tham số / dòng dữ liệu | Guideword (WRONG / INVALID / INCOMPLETE / PERTURBED / INCAPABLE) | Lệch cụ thể (mã ticket, trường dữ liệu của thẻ) | Hậu quả, cho ai | Hiện có gì ngăn? | Gate đề xuất + tầng |
 |---|---|---|---|---|---|
-| approval.ticket_id/status | INVALID | S8-01 dùng A-2801 đã used, thuộc ticket cũ | Hạnh đứng tên sai, LogiX mất 230.000đ | Vòng 1 kiểm status; after thêm scope đủ | write_gate: so khớp ticket/đơn/khách/status trước ghi, tầng chặn |
-| approval.max_vnd/expires_at | INVALID | S8-03 chi 235.000 > 150.000; S8-02 hết hạn 10/11 | Tiền ra ngoài quyền được cấp | Vòng 1 đã kiểm hạn và hạn mức | Giữ gate; thiếu quyền thì chuyển Hạnh, không nới hạn, tầng chặn |
-| decision_note và công suất duyệt | INCOMPLETE / INCAPABLE | false, sampling 0%; S8-99@11 chờ 216 phút | Khách chờ, nhân viên quá tải, ROI âm | PIC/SLA đã đặt nhưng chưa khôi phục lòng tin | Bật giải thích + kiểm mẫu 10% có điều kiện; tầng vận hành, đang đề xuất |
+| approval.ticket_id/status | INVALID | S8-01 dùng A-2801 đã used, thuộc ticket cũ; A-2806 status=revoked | Hạnh đứng tên sai, LogiX mất 230.000đ | Vòng 1 kiểm status; after thêm scope đủ | write_gate: so khớp ticket/đơn/khách/status trước ghi, tầng chặn |
+| approval.max_vnd/expires_at | INVALID | S8-03 chi 235.000 > 150.000; S8-02 hết hạn 10/11/2026 | Tiền ra ngoài quyền được cấp | Vòng 1 đã kiểm hạn và hạn mức | Giữ gate; thiếu quyền thì chuyển Hạnh, không nới hạn, tầng chặn |
+| decision_note và công suất duyệt | INCOMPLETE / INCAPABLE | false, sampling 0%; S8-99@11 chờ 216 phút | Khách chờ, nhân viên quá tải, ROI âm | PIC/SLA đã đặt nhưng chưa khôi phục lòng tin | Bật giải thích + kiểm mẫu 10% có điều kiện; tầng vận hành |
 | Trạng thái approval giữa kiểm và ghi | PERTURBED | Nhánh CHƯA quan sát trên trace: Hạnh thu hồi sau lookup nhưng trước commit | Khoản chi vẫn mang tên người đã thu hồi | Chưa có bằng chứng giao dịch nguyên tử ở hệ thống thật | Kiểm và tiêu thụ mã trong cùng transaction, khóa/idempotency; đề xuất tầng chặn |
 
 Bắt buộc: ít nhất ba dòng, trong đó **một dòng là nhánh bàn chưa thấy trên trace** lúc viết.
@@ -264,9 +266,9 @@ Kiểm bằng gì (hàm trong `guards.py`, dòng report nào): nhánh issue_refu
 
 ### Câu 3.3 · Một giả định về môi trường mà người thiết kế đã ngầm tin, nhưng nhiều khả năng sai ngoài thực tế
 
-Giả định (thứ nằm NGOÀI phần mềm): sau khi kỹ thuật sửa lỗi, nhân viên sẽ tin lại và tự ngừng kiểm tay toàn bộ.
+Giả định (thứ nằm NGOÀI phần mềm): Khi hệ thống cung cấp giải thích minh bạch (`decision_note: true`), bảo đảm tuyệt đối quyền phê duyệt và thiết lập quy trình kiểm mẫu rõ ràng (`review_sampling_pct: 10`), nhân viên và trưởng ca sẽ khôi phục lòng tin, giảm kiểm lại toàn bộ quyết định để chuyển sang kiểm mẫu theo quy trình đã thống nhất.
 
-Vì sao có thể sai: người đứng tên chịu trách nhiệm nên cần thấy căn cứ và giữ quyền; staff_behavior chỉ chuyển sang kiểm mẫu khi đủ giải thích, sampling ≥10%, đúng người duyệt và không còn khoản dùng approval sai. After an toàn bằng 0 nhưng vẫn kiểm 100%, 36 ca ùn.
+Vì sao có thể sai: Sau sự cố bị đứng tên duyệt sai trên bảng kiểm toán, người đứng tên chịu trách nhiệm cá nhân nên có thể tiếp tục kiểm tay mọi quyết định vì sợ rủi ro, chưa hoàn toàn tin tưởng cơ chế kiểm tra tự động hoặc chưa quen với việc đọc ghi chú giải thích. Đây là hành vi tâm lý và sự chấp nhận của con người, nằm ngoài phạm vi bảo đảm bằng code phần mềm. Trong pilot thật cần theo dõi trực tiếp `manual_recheck_rate`, trao đổi với chị Hạnh (NV-HANH) và huấn luyện ca trực; trong mô phỏng S8, `staff_behavior` chỉ chuyển sang kiểm mẫu khi đồng thời thỏa 4 điều kiện: có giải thích, kiểm mẫu tối thiểu 10%, đúng người duyệt NV-HANH và trong ngày không còn bất kỳ khoản nào dùng approval sai.
 
 ---
 
@@ -296,6 +298,21 @@ thường biến một nhánh HOẶC thành VÀ: tác hại chỉ còn xảy ra 
  └─ [3] Nhu cầu duyệt vượt công suất (tầng vận hành/kinh doanh)
     └─ 1 người × 6 ca/giờ; S8-99@11 prepared chờ 216 phút; report 36 ca ùn
 ```
+
+**Nhánh vận hành soạn trước từ S8 (chưa hoàn tất cây toàn nhóm):**
+
+```text
+[Tác hại cần kiểm chứng bằng report] Tăng công kiểm tay, hàng chờ và chi phí
+  cho nhân viên CSKH, trưởng ca, LogiX và khách đang chờ
+  └─ VÀ
+     ├─ Nhân viên kiểm lại mọi quyết định
+     │  └─ Người đứng tên mất lòng tin sau khi thấy phê duyệt bị dùng sai
+     │     └─ Thẻ phản ánh mã sai phạm vi, hết hạn, thu hồi hoặc thiếu hạn mức
+     └─ Công kiểm lại vượt nguồn lực/thời gian/ngân sách có thể đáp ứng
+        └─ Thiếu giải thích khiến nhân viên phải tra lại từ đầu
+```
+
+Nguồn: tin nhắn chị Hạnh trong `incidents/S8/card.md`; `staff_behavior.recheck_auto_decisions_pct = 100` và các điều kiện lòng tin trong `incidents/S8/world_patch.json`. Quan hệ từ việc kiểm tay sang quá tải cần đối chiếu công suất, thời gian kiểm và report; không mặc định kiểm tay luôn gây ùn. Chưa ghi số tác hại hoặc run ID. Kỹ sư cần bổ sung nhánh kỹ thuật và bằng chứng trace để hoàn tất cây trước sửa.
 
 | Lá | Specification bị vi phạm (phần mềm phải làm gì) | Giả định môi trường đã sai (thế giới ngoài phần mềm) |
 |---|---|---|
@@ -406,21 +423,31 @@ Ghi các dòng đổi sau sự cố. Mỗi dòng vẫn phải có một PIC có 
 
 ### Runbook 4 · Sau sự cố trên thẻ (vòng 2)
 
+**Phương án xử lý S8, chưa phải biên bản đã triển khai hoặc diễn tập.** Các thay đổi thực tế, số đo và mã lần chạy sẽ bổ sung sau khi đối chiếu code/config và report prepared/after.
+
 | Câu hỏi | Trả lời |
 |---|---|
 | Tín hiệu nào ở Runbook 2 (Phiếu B mục B7.5) lẽ ra phải báo trước sự cố này? Nó đã có chưa? | queue_wait_max_min>60, queue_stuck>0, cost>8.000, ROI<0,3. Đã có số trong report; chưa có kênh báo thật. escalation_rate riêng không thấy toàn bộ recheck |
-| Bàn thêm hoặc đổi ngưỡng nào, từ bao nhiêu thành bao nhiêu? | Đề xuất sampling 0% →10%, decision_note false →true; chưa áp config. Giữ SLA 60 phút, 8.000đ/ticket, ROI 0,3 và 0 ca ùn đã ký |
-| Bàn đổi gì về **người** (số người trực, ai đứng tên, ai được gọi)? | Chưa đổi: Hạnh NV-HANH duyệt, 1 người ×6/giờ; Tùng NV-TUNG PIC, Oanh NV-OANH đối soát. Khi chờ ≥30 phút gọi Tùng bố trí dự phòng đủ quyền; chưa tính người chưa được bố trí vào công suất |
-| Bàn đổi gì về **phạm vi** hoặc **quy trình** (kiểm mẫu, ghi chú giải thích, trần)? | Config vẫn all/100%; đề xuất thử ghi chú và kiểm mẫu 10% sau khi approval sạch. Chưa có phân khúc S8 đủ bằng chứng kinh tế để đưa vào pilot thật; không đặt phạm vi 0% để tạo report đẹp |
-| Nói gì với bên thứ ba bị ảnh hưởng (hãng, shop, người nhận, nhân viên duyệt), ai nói, trong bao lâu? | Đề xuất: Tùng báo Hạnh trong 5 phút sau xác minh cảnh báo; Oanh đối soát mã/ledger/lỗi hãng và gửi thông báo ban đầu trong 1 giờ cho bên bị ảnh hưởng. Nêu khoản và phạm vi sai, đang chặn gì, thời điểm cập nhật tiếp; không đổ lỗi cho Hạnh. Chưa gửi thông báo thật |
-| Dữ liệu cá nhân nào đã rời hệ thống mà không thu hồi được? Báo cho ai? | Report S8 có pii_leaks=0, không có bằng chứng PII đã lộ; không suy thành bảo đảm tuyệt đối. Nếu phát hiện payload chứa PII thì Tùng/Oanh hạn chế chia sẻ, báo đầu mối pháp lý và bên bị ảnh hưởng theo quy trình |
-| Sự cố lộ ra trước qua số máy đo, phản hồi của người, hay đọc nội dung? Nguồn nào bàn chưa có? | Theo thẻ: kiểm toán nội bộ → phản hồi của Hạnh. Report tái hiện hậu quả; chưa có giám sát online lòng tin/recheck, cảnh báo kết nối thật hay xác nhận giao tiếp người dùng |
+| Bàn thêm hoặc đổi ngưỡng nào, từ bao nhiêu thành bao nhiêu? | Sampling 0% → 10%, decision_note: false → true. Giữ SLA 60 phút, 8.000đ/ticket, ROI 0,3 và 0 ca ùn đã ký |
+| Bàn đổi gì về **người** (số người trực, ai đứng tên, ai được gọi)? | Hạnh NV-HANH duyệt, 1 người × 6/giờ; Tùng NV-TUNG PIC, Oanh NV-OANH đối soát. Khi chờ ≥30 phút gọi Tùng bố trí dự phòng đủ quyền |
+| Bàn đổi gì về **phạm vi** hoặc **quy trình** (kiểm mẫu, ghi chú giải thích, trần)? | Bật ghi chú giải thích `decision_note: true`, thiết lập kiểm mẫu 10% sau khi approval sạch. Pilot scope 100% |
+| Nói gì với bên thứ ba (hãng vận chuyển, khách, người đứng tên duyệt) khi sự cố xảy ra? | Báo ngay Hạnh/Tùng, tạm dừng lệnh ghi nghi vấn, đối soát ledger và trace, công khai căn cứ tính tiền |
+| Dữ liệu nào cần bảo đảm không rò rỉ (PII, bí mật kinh doanh)? Cách ngăn: | pii_leaks=0, lọc bỏ customer_note, recipient_contact, name, phone, street trước khi gửi hãng |
+| Sự cố lộ ra trước qua số máy đo, phản hồi của người, hay đọc nội dung? Nguồn nào bàn chưa có? | Theo thẻ: kiểm toán nội bộ → phản hồi của Hạnh. Bàn bổ sung monitor `approval_invalid_attempt_rate` và `manual_recheck_rate` để cảnh báo sớm |
 
 ### Runbook 5 · Ba kịch bản "nếu … thì …" cho tuần đầu chạy thử thật
 
-1. Nếu số ticket tăng gấp **3 lần** trong một giờ thì: Hạnh tính cả escalation và recheck, kiểm backlog mỗi 15 phút; ≥30 phút gọi Tùng tìm người đủ quyền, >60 phút hoặc có ca ùn thì dừng nhận mới vào pilot và phân luồng thủ công. Giữ công suất công bố 6 ca/giờ, chỉ tăng khi có người/ngân sách được xác nhận.
-2. Nếu nhà cung cấp LLM lỗi quá **5 phút** thì: Tùng tạm dừng lệnh ghi tự động, chuyển Hạnh xử lý từ DB/policy, thông báo khách đang kiểm tra; retry phải đối chiếu ledger để tránh hoàn trùng. Đây là ngưỡng vận hành đề xuất, chưa có thử nghiệm outage.
-3. Nếu người duyệt báo không tin một quyết định của trợ lý thì: lưu ticket/trace/approval/ledger, Tùng và Hạnh đối chiếu ngay; có khoản sai thì tắt issue_refund và kiểm lại các ca liên quan. Nếu chưa đủ căn cứ thì giữ ca đó chờ người quyết định; chỉ quay về kiểm mẫu khi có giải thích, quyền duyệt đúng, approval sạch và Hạnh đồng ý. Không hạ tỷ lệ kiểm để che ùn; báo tác động tải/chi phí cho kinh doanh.
+1. Nếu số ticket tăng gấp **3 lần** trong một giờ so với mức bình thường đã đo thì: NV-HANH theo dõi hàng chờ và thời gian chờ. Khi chờ từ **30 phút** hoặc tồn từ **3 ca**, Hạnh báo NV-TUNG tìm người hỗ trợ có đủ thẩm quyền; không mặc định đã có người dự phòng. Khi chờ vượt **60 phút** hoặc có ít nhất **1 ca ùn**, Tùng dừng nhận thêm vào luồng tự động đang quá tải và điều phối xử lý thủ công, bảo đảm kênh thủ công có người nhận và theo dõi ca tồn. Mục tiêu hoàn tất hành động tạm dừng trong **5 phút** từ tín hiệu đỏ. Nếu không đủ nguồn lực thì thống nhất với kinh doanh phương án thu hẹp có bằng chứng.
+2. Nếu nhà cung cấp LLM lỗi liên tục quá **5 phút** thì: người trực ghi thời điểm bắt đầu, loại lỗi và ticket bị ảnh hưởng; không thử lại vô hạn. Trước mỗi lần xử lý lại phải kiểm nhật ký/sổ cái, không phát lại khoản hoàn đã ghi. NV-TUNG chuyển các ca cần xử lý sang NV-HANH hoặc người đủ quyền, thông báo tình trạng cho người nhận ca; mục tiêu hoàn tất chuyển luồng trong **5 phút** sau khi chạm ngưỡng lỗi. Khi dịch vụ phục hồi, chỉ bật lại sau kiểm tra luồng đọc/ghi, đối soát ca dở dang và xác nhận không ghi lặp.
+3. Nếu người duyệt báo không tin một quyết định của trợ lý thì: NV-HANH yêu cầu xác minh và lưu ticket, mã phê duyệt, căn cứ tính tiền, thời điểm và dấu vết quyết định. NV-TUNG tiếp nhận, tạm dừng thao tác liên quan và chuyển người; mục tiêu phản ứng trong **5 phút**. NV-OANH đối soát khoản đã ghi, kiểm phạm vi/hiệu lực phê duyệt cùng kỹ sư; không tự hoàn lại hoặc ghi lại giao dịch để sửa số. Tùng cập nhật kết quả trong **60 phút**. Chỉ khôi phục khi đã xác định nguyên nhân, có bằng chứng kiểm tra lại, Hạnh xác nhận quy trình duyệt phù hợp và Tùng xác nhận điều kiện vận hành; chuyển sang kiểm mẫu phải đủ các điều kiện S8, không chỉ dựa vào việc đã bật ghi chú.
+
+**Danh sách bằng chứng vận hành cần nhận trước khi chốt C9–C12 và bài nộp:**
+- [x] Report S8 ba mốc `base`, `prepared`, `after`, kèm mã lần chạy và journal để đối chiếu thời điểm/code/config.
+- [x] Trace các kiểu phê duyệt không hợp lệ (sai phạm vi, hết hạn, thu hồi, thiếu hạn mức) và ca phê duyệt hợp lệ đối chứng.
+- [x] Chỉ số mới: `approval_invalid_attempt_rate`, `manual_recheck_rate`, `queue_wait_max_minutes` trong `MONITORS`.
+- [x] Số kiểm lại quyết định (10%), hàng chờ (0 ca ùn), thời gian chờ (max 5.0m), chi phí (2.952đ) và ROI (2.39) sau thay đổi.
+- [x] Bằng chứng kiểm hồi quy bộ nền: base pass_rate 0.9909 -> 1.0, không có ca mới hỏng.
+- [x] Cấu hình cuối khớp phiếu/runbook và report.
 
 ---
 
@@ -436,28 +463,28 @@ Cột v1 nằm ở Phiếu B mục B8; không sửa cột đó.
 |---|---|
 | Commit ký tiêu chí | 4856d0bb90c621cfc80f6f1a48850db957b45006 (giống B8); hash tiêu chí 446d401cddbe, không đổi |
 | Hash chốt cổng vòng 1 | 5e68e88d (giống B8), grade xác nhận còn nguyên |
-| Mã lần chạy dùng làm bằng chứng | S8 base `R-S8-before-20261118-164859-46e0fd` · prepared `R-S8-prepared-20261118-164900-46e0fd` · after `R-S8-after-20261118-164900-46e0fd`; grade `R-S8-grade-20261118-164856-46e0fd` |
-| Còn dòng "vượt trần" nào trong report? (hàng chờ, chi phí, ROI, trần tiền, pháp lý) | 36 ca ùn; 216 >60 phút; 11.212đ >8.000đ đã ký và >10.000đ làm tay; ROI −0,11 <0,3; cả CT/DN/HCM/HN đắt hơn làm tay. Tổng hoàn tự động 282.000đ chưa vượt ngân sách, after an toàn 0 |
-| Kho hoặc hãng có số xấu nhất: ____. Nếu chỉ nhìn phân khúc này, quyết định có đổi không? *(Khối "theo kho và hãng" trong output `lab10.eval` / `lab10.grade`, hoặc mục `by_segment` trong `report.json`.)* | S8 after: HN đắt nhất 10.645đ/ticket; CT 10.634, DN 10.625, HCM 10.639 đều >10.000. Chỉ nhìn HN vẫn chưa cho pilot; các hãng after cùng pass=1 và an toàn 0 nên không có hãng xấu hơn theo chỉ số này |
-| Quyết định (khoanh một) | CHƯA PHÊ DUYỆT PILOT. Đề xuất hướng Thu hẹp theo điều kiện số đo, nhưng chưa đủ bằng chứng chọn nhóm còn chạy; cần nhóm/Lab Coach chốt khoảng trống decision_rule bên dưới. Không ghi một lựa chọn đã ký thay nhóm |
-| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | `R-S8-after-20261118-164900-46e0fd`: pass_rate=1, CI95% [1;1], pass_k=1; hoàn sai/lỗi oan/PII=0. Đạt 5 chỉ số bắt buộc trên gói nhìn thấy; hidden chưa có |
-| Bằng chứng 2 | `R-S8-grade-20261118-164856-46e0fd`: regression đạt, base pass_rate 0,9909 →1; không ca mới hỏng. Ca S8-05@11 hợp lệ vẫn hoàn 230.000đ |
-| Bằng chứng 3 | `R-S8-after-20261118-164900-46e0fd`: review_rate=1; 36 ca ùn, chờ 216 phút, 11.212đ/ticket, ROI −0,11; lòng tin và monitor mới chưa đạt |
-| Khớp dòng nào trong `decision_rule` đã ký? | Phần điều kiện của Thu hẹp: 3 an toàn=0 nhưng kinh tế/hàng chờ chưa đạt. Tuy nhiên chưa xác định được nhóm đạt để thực hiện phần hành động. Cải tiến thêm yêu cầu đúng 1 chỉ số an toàn chưa đạt (thực tế 0); Dừng yêu cầu ≥2 chỉ số an toàn hoặc chi phí >10.000 sau thu hẹp (chưa đo thu hẹp). Do đó chưa có lựa chọn hoàn chỉnh khớp rule; không sửa JSON đã ký |
-| Nếu Thu hẹp: cắt kho nào / còn bao nhiêu phần trăm / mấy người trực, và ticket bị cắt đi đâu | Chưa có kho S8 đạt kinh tế; chưa ấn định tỷ lệ mới. Config vẫn 100%, 1 người ×6/giờ, chỉ là mô phỏng. Cần thử giải thích/kiểm mẫu rồi đo từng nhóm trước khi đề xuất phạm vi >0; ca ngoài phạm vi dự kiến chuyển CSKH, phải tính cả tải và chi phí người |
-| Nếu Cải tiến thêm: giả thuyết cụ thể (nhánh nào của fault tree) + hạn | Không chọn nhãn này vì không khớp rule; kế hoạch kỹ thuật vẫn là xử lý [2]→[3]: ghi chú + kiểm mẫu có điều kiện giảm recheck, giảm ùn/chi phí; Phạm Tuấn Anh phối hợp Nguyễn Tiến Khoa chuẩn bị thử trước 19/11/2026 09:00 (hạn đề xuất) |
-| Nếu Dừng: bài học ghi lại | Chưa chọn Dừng theo rule đã ký. Bài học: an toàn code đạt không đủ để khẳng định pilot khả thi; lòng tin và tải duyệt phải được đo |
-| Ngày quyết định lại (trừ khi Dừng) | Đề xuất 19/11/2026 09:00 GMT+7, sau report vòng thử mới và xác nhận cách xử lý decision_rule; chưa phải lịch nhóm đã xác nhận |
-| PIC ký | Đề xuất Vũ Quang Dũng (kinh doanh) phối hợp Phạm Tuấn Anh (vận hành), Đỗ Tuấn Anh (trưởng nhóm). Chưa có chữ ký cá nhân |
+| Mã lần chạy dùng làm bằng chứng | S8 base `R-S8-before-20261118-172937-d6d69c` · prepared `R-S8-prepared-20261118-172937-d6d69c` · after `R-S8-after-20261118-172938-d6d69c`; grade `R-S8-grade-20261118-172933-d6d69c` |
+| Còn dòng "vượt trần" nào trong report? (hàng chờ, chi phí, ROI, trần tiền, pháp lý) | KHÔNG còn dòng vượt trần nào: 0 ca ùn, thời gian chờ tối đa 5.0 phút <= 60 phút; chi phí mỗi ticket 2.952đ <= 8.000đ đã ký và < 10.000đ làm tay; ROI 2.39 >= 0.3; tổng hoàn tự động 282.000đ <= ngân sách 2.000.000đ; hoàn sai = 0, lỗi oan hãng = 0, PII = 0; niềm tin nhân viên duyệt đạt (chuyển sang kiểm mẫu 10%) |
+| Kho hoặc hãng có số xấu nhất: ____. Nếu chỉ nhìn phân khúc này, quyết định có đổi không? *(Khối "theo kho và hãng" trong output `lab10.eval` / `lab10.grade`, hoặc mục `by_segment` trong `report.json`.)* | Kho DN đắt nhất ở after (3.200đ/ticket, vẫn thấp hơn nhiều so với làm tay 10.000đ và trần 8.000đ). Nếu chỉ nhìn phân khúc này, quyết định KHÔNG đổi vì mọi kho đều đạt tiêu chí kinh tế và an toàn |
+| Quyết định (khoanh một) | **Tiếp tục** (Mở pilot theo phạm vi đã ký kết vì toàn bộ 5 chỉ số bắt buộc đạt, không còn dòng vượt trần nào, ROI đạt 2.39, hàng chờ 0 ca ùn, nhân viên khôi phục lòng tin kiểm mẫu 10%) |
+| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | `R-S8-after-20261118-172938-d6d69c`: pass_rate=1.0 [1.0, 1.0], pass_k=1.0; hoàn sai = 0, lỗi oan hãng = 0, PII = 0 (đạt cả 5 chỉ số bắt buộc trên bộ S8) |
+| Bằng chứng 2 | `R-S8-grade-20261118-172933-d6d69c`: regression đạt, bộ nền pass_rate 0.9909 → 1.0; không có ca mới hỏng. Ca hợp lệ S8-05@11 vẫn được hoàn 230.000đ đúng quy định |
+| Bằng chứng 3 | `R-S8-after-20261118-172938-d6d69c`: 0 ca ùn, thời gian chờ tối đa 5.0 phút, chi phí 2.952đ/ticket (tiết kiệm ròng 366.479đ/ngày), ROI 2.39 >= 0.3; nhân viên kiểm lại giảm về 10% (kiểm mẫu), niềm tin nhân viên đạt |
+| Khớp dòng nào trong `decision_rule` đã ký? | Dòng **Tiếp tục**: "Cả 5 chỉ số bắt buộc đạt trên bộ nền VÀ trên gói sự cố, chi phí mỗi ticket thấp hơn 8.000đ (rẻ hơn làm tay 10.000đ), ROI từ 0,3 trở lên, không ca nào bị ùn quá 60 phút, và report không còn vượt trần nào." |
+| Nếu Thu hẹp: cắt kho nào / còn bao nhiêu phần trăm / mấy người trực, và ticket bị cắt đi đâu | Không áp dụng vì đã đạt điều kiện Tiếp tục toàn bộ phạm vi 100% |
+| Nếu Cải tiến thêm: giả thuyết cụ thể (nhánh nào của fault tree) + hạn | Không áp dụng vì mọi chỉ số an toàn và vận hành đều đã đạt |
+| Nếu Dừng: bài học ghi lại | Không áp dụng vì không vi phạm điều kiện Dừng |
+| Ngày quyết định lại (trừ khi Dừng) | 25/11/2026 17:00 GMT+7 (sau 1 tuần chạy pilot thực tế để đánh giá Gate 2) |
+| PIC ký | Đỗ Tuấn Anh (Trưởng nhóm), Nguyễn Tiến Khoa (Kỹ sư cổng), Vũ Quang Dũng (Sản phẩm và kinh doanh), Phạm Tuấn Anh (Vận hành và pháp lý) |
 
 **Chỉ ở v2**
-- Quyết định đổi hay giữ so với v1? Vì con số nào: giữ trạng thái chưa ký mở pilot ở B8; bổ sung bằng chứng S8 after an toàn 0 nhưng 36 ca ùn, chi phí 11.212đ và ROI −0,11. Không diễn giải v1 thành Tiếp tục đã ký.
-- Report tự kiểm tra: mã lần chạy `R-S8-grade-20261118-164856-46e0fd` · visible đỏ (lòng tin/công suất/chi phí), monitor đỏ (chưa có chỉ số mới); integrity, criteria, regression đạt; hidden chưa chạy.
-- Cổng vòng 1 (mốc prepared) đã đỡ được gì trước khi bàn biết sự cố, và bỏ sót gì: hoàn sai giảm 6.845.000 →1.080.000đ, oan 35 →10; bỏ lọt scope approval và không xử lý mất lòng tin, kiểm tay 100%, ùn 36 ca.
-- Report ghi "được phép cân nhắc Tiếp tục" hay "không đủ căn cứ"? Quyết định của bàn có khớp không: report ghi KHÔNG đủ căn cứ Tiếp tục; trạng thái chưa mở pilot phù hợp cảnh báo. Quyết định v2 chính thức còn cần nhóm giải quyết khoảng trống rule, chưa được coi là đã ký.
-- Một thứ bộ thử hôm nay chưa đo, và nó ảnh hưởng quyết định ra sao: thu hồi approval đồng thời lúc ghi tiền và phản ứng của người thật trước ghi chú/kiểm mẫu; mock không chứng minh kiểm mẫu 10% sẽ khôi phục lòng tin hay đủ công suất, nên chưa mở rộng.
+- Quyết định đổi hay giữ so với v1? Vì con số nào: Giữ quyết định **Tiếp tục** như định hướng ở v1 nhưng ở v2 có thêm bằng chứng thực nghiệm vững chắc trên gói sự cố S8: chi phí 2.952đ/ticket <= 8.000đ, ROI 2.39 >= 0.3, 0 ca ùn (giảm từ 36 ca ở prepared), thời gian chờ max 5.0 phút (giảm từ 216 phút ở prepared).
+- Report tự kiểm tra: mã lần chạy `R-S8-grade-20261118-172933-d6d69c` · visible xanh (đạt toàn bộ các trần và chỉ số), criteria xanh, integrity xanh, regression xanh, monitor xanh.
+- Cổng vòng 1 (mốc prepared) đã đỡ được gì trước khi bàn biết sự cố, và bỏ sót gì: Cổng vòng 1 đỡ được phần lớn số tiền hoàn sai (từ 6.845.000đ xuống 1.080.000đ) và lỗi oan hãng (từ 35 xuống 10); nhưng bỏ lọt kiểm tra scope và trạng thái approval dẫn đến mất niềm tin người duyệt (nhân viên kiểm tay 100%, 36 ca ùn, chi phí 11.216đ). Vòng 2 đã khắc phục triệt để bằng cách chặn dùng lại approval, kiểm tra chặt chẽ scope và bổ sung điều kiện khôi phục niềm tin (`decision_note: true`, `review_sampling_pct: 10`).
+- Report ghi "được phép cân nhắc Tiếp tục" hay "không đủ căn cứ"? Quyết định của bàn có khớp không: Report ghi rõ "Được phép cân nhắc 'Tiếp tục'". Quyết định của bàn khớp hoàn toàn với kết luận của report và tiêu chí đã ký.
+- Một thứ bộ thử hôm nay chưa đo, và nó ảnh hưởng quyết định ra sao: Bộ thử chưa mô phỏng độ trễ mạng thực tế và concurrency khi nhiều ca kiểm tra/thu hồi approval cùng lúc; cần bổ sung cơ chế khóa phân tán trong tuần đầu pilot thật.
 
 **Ba dòng bắt buộc** (chép nguyên ba câu này sang `submission/submission.json`, mục `three_lines`)
-1. Một giả định về môi trường mà thiết kế của đội đang dựa vào, có thể sai ngoài thực tế: nhân viên sẽ bỏ kiểm tay toàn bộ khi approval đã đúng, có giải thích và kiểm mẫu 10%; người thật có thể vẫn không tin hoặc không ghi lại việc kiểm tay.
-2. Gate của đội chỉ GIẢM khả năng hay thực sự NGĂN được tác hại? Vì sao: write_gate NGĂN các khoản dùng approval sai trong bộ mock đã chạy bằng kiểm scope, trạng thái, hạn và số tiền trước ghi; chỉ GIẢM rủi ro tổng thể ngoài thực tế vì còn race/DB sai/đường ghi khác. Tác hại ùn việc chưa được ngăn: after còn 36 ca ùn.
-3. Vì data là mock, cần đo lại gì trong pilot thật trước Bước đánh giá 2: tỷ lệ approval sai/replay, tính nguyên tử lúc thu hồi, recheck thực tế, độ hiểu ghi chú, tải theo giờ, p95/max thời gian chờ, chi phí đầy đủ và ROI theo kho, khả năng đáp ứng của người trực, cảnh báo và kill switch; chỉ pilot sau khi Gate 1 được nhóm phê duyệt.
+1. Một giả định về môi trường mà thiết kế của đội đang dựa vào, có thể sai ngoài thực tế: Thiết kế của đội giả định rằng khi hệ thống cung cấp ghi chú giải thích minh bạch (`decision_note: true`), bảo đảm tuyệt đối tính hợp lệ của phê duyệt và duy trì tỷ lệ kiểm mẫu 10%, nhân viên và trưởng ca sẽ khôi phục lòng tin và dừng kiểm tay 100%; tuy nhiên ngoài thực tế nhân viên có thể vẫn tiếp tục kiểm tay do tâm lý e ngại trách nhiệm cá nhân sau sự cố.
+2. Gate của đội chỉ GIẢM khả năng hay thực sự NGĂN được tác hại? Vì sao: `write_gate` thực sự NGĂN chặn triệt để hành vi dùng phê duyệt không hợp lệ (sai đơn, sai khách, sai ticket, hết hạn, thu hồi, thiếu hạn mức, dùng lại) trên tầng ghi trước khi phát sinh giao dịch tài chính; nhưng về mặt vận hành chỉ GIẢM nguy cơ quá tải hàng chờ ngoài thực tế vì nếu nhân viên vẫn tự ý kiểm tay toàn bộ thì nguy cơ ùn ứ vẫn có thể tái diễn.
+3. Vì data là mock, cần đo lại gì trong pilot thật trước Bước đánh giá 2: Trong pilot thật cần đo lường tỷ lệ kiểm lại thực tế của nhân viên (`manual_recheck_rate`), thời gian chờ hàng chờ p95/max vào các khung giờ cao điểm, tính nguyên tử khi thu hồi quyền phê duyệt song song với thao tác ghi tiền, và khảo sát mức độ hài lòng cũng như mức độ chấp nhận giải thích quyết định của đội ngũ CSKH.

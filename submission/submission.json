@@ -1,12 +1,17 @@
 {
-  "team": "",
-  "members": [],
-  "incident": "",
-  "decision_v1": "",
-  "decision_v2": "",
+  "team": "K5-L3A-DAY10-KKK-PoCtoPilotGate1",
+  "members": [
+    "DoTuanAnh-2A202603465",
+    "NguyenTienKhoa-2A202603460",
+    "VuQuangDung-2A202603486",
+    "PhamTuanAnh-2A202603503"
+  ],
+  "incident": "S8",
+  "decision_v1": "Tiếp tục",
+  "decision_v2": "Tiếp tục",
   "three_lines": {
-    "environment_assumption": "",
-    "reduce_or_prevent": "",
-    "measure_in_pilot": ""
+    "environment_assumption": "Thiết kế của đội giả định rằng khi hệ thống cung cấp ghi chú giải thích minh bạch (decision_note: true), bảo đảm tuyệt đối tính hợp lệ của phê duyệt và duy trì tỷ lệ kiểm mẫu 10%, nhân viên và trưởng ca sẽ khôi phục lòng tin và dừng kiểm tay 100%; tuy nhiên ngoài thực tế nhân viên có thể vẫn tiếp tục kiểm tay do tâm lý e ngại trách nhiệm cá nhân sau sự cố.",
+    "reduce_or_prevent": "write_gate thực sự NGĂN chặn triệt để hành vi dùng phê duyệt không hợp lệ (sai đơn, sai khách, sai ticket, hết hạn, thu hồi, thiếu hạn mức, dùng lại) trên tầng ghi trước khi phát sinh giao dịch tài chính; nhưng về mặt vận hành chỉ GIẢM nguy cơ quá tải hàng chờ ngoài thực tế vì nếu nhân viên vẫn tự ý kiểm tay toàn bộ thì nguy cơ ùn ứ vẫn có thể tái diễn.",
+    "measure_in_pilot": "Trong pilot thật cần đo lường tỷ lệ kiểm lại thực tế của nhân viên (manual_recheck_rate), thời gian chờ hàng chờ p95/max vào các khung giờ cao điểm, tính nguyên tử khi thu hồi quyền phê duyệt song song với thao tác ghi tiền, và khảo sát mức độ hài lòng cũng như mức độ chấp nhận giải thích quyết định của đội ngũ CSKH."
   }
 }
