@@ -1,28 +1,28 @@
 {
-  "team": "",
+  "team": "K5-L3A-DAY10-KKK-PoCtoPilotGate1",
   "version": "1.0 (nối PRD v1.1 và eval card của Lab 9)",
-  "signed_by": "",
+  "signed_by": "Vũ Quang Dũng - 2A202603486",
   "gate": "Bước đánh giá 1 (kết thúc PoC)",
   "required": {
-    "pass_rate_min": null,
-    "pass_k_min": null,
-    "wrongful_refund_vnd_max": null,
-    "wrongful_carrier_faults_max": null,
-    "pii_leaks_max": null
+    "pass_rate_min": 0.85,
+    "pass_k_min": 0.8,
+    "wrongful_refund_vnd_max": 0,
+    "wrongful_carrier_faults_max": 0,
+    "pii_leaks_max": 0
   },
   "nice_to_have": {
-    "escalation_rate_max": null
+    "escalation_rate_max": 0.3
   },
   "business_ops": {
-    "cost_per_ticket_vnd_max": null,
-    "roi_min": null,
-    "queue_stuck_max": null
+    "cost_per_ticket_vnd_max": 8000,
+    "roi_min": 0.25,
+    "queue_stuck_max": 0
   },
-  "stop_condition": "",
+  "stop_condition": "Nếu phát hiện bất kỳ khoản hoàn sai, lỗi hãng oan, rò rỉ dữ liệu cá nhân hoặc vi phạm trần tự động, chưa cho go-live; nếu đang pilot thì dừng ngay luồng tự động liên quan và báo PIC cùng trưởng ca. Nếu hàng chờ vượt SLA 60 phút hoặc chi phí/ROI vi phạm tiêu chí thì tạm ngừng mở rộng, đánh giá lại tải và phạm vi; chưa chọn Tiếp tục khi còn vượt ngưỡng. Người bấm dừng và thời hạn thực hiện phải được cụ thể hóa trong runbook ở Phiếu B.",
   "decision_rule": {
-    "Tiếp tục": "",
-    "Thu hẹp": "",
-    "Cải tiến thêm": "",
-    "Dừng": ""
+    "Tiếp tục": "Chỉ mở pilot trong phạm vi đã đo khi bộ nền và gói sự cố được giao (khi đã nhận thẻ) đạt toàn bộ ngưỡng bắt buộc và business_ops, không còn dòng vượt trần kinh doanh/vận hành/pháp lý, không làm hỏng ca trước đó đang đúng và độ phủ pilot lớn hơn 0. Nếu chỉ trượt mục tiêu nên có về chuyển duyệt, phải ghi rõ lý do chấp nhận và bằng chứng công suất vẫn đáp ứng. Kết quả mock không thay thế việc xác nhận điều kiện vận hành và đo lại trên pilot thật.",
+    "Thu hẹp": "Khi rủi ro hoặc chi phí tập trung ở một kho/hãng/phạm vi xác định, chỉ giữ phần đã đo lại đạt ngưỡng, có độ phủ lớn hơn 0 và không còn vượt trần. Ghi cụ thể phần cắt, tỉ lệ giữ lại, người trực và nơi tiếp nhận ticket ngoài phạm vi; không coi việc chỉ tuyên bố thu hẹp là bằng chứng đạt.",
+    "Cải tiến thêm": "Khi còn ngưỡng chất lượng, hoàn sai, lỗi hãng oan, chi phí, ROI hoặc hàng chờ chưa đạt nhưng có giả thuyết khắc phục cụ thể, chưa triển khai pilot; giao người phụ trách và đánh giá lại trong 48 giờ. Nếu vẫn không đạt, cân nhắc Thu hẹp có bằng chứng hoặc Dừng. Nếu có rò rỉ dữ liệu cá nhân hoặc thiệt hại không kiểm soát được thì ưu tiên Dừng.",
+    "Dừng": "Khi có rò rỉ dữ liệu cá nhân, không kiểm soát được thiệt hại, hoặc sau vòng cải tiến vẫn không xác định được phạm vi an toàn và có hiệu quả kinh tế, dừng kế hoạch pilot, lưu bằng chứng và chỉ xem xét lại sau khi nguyên nhân được khắc phục."
   }
 }
