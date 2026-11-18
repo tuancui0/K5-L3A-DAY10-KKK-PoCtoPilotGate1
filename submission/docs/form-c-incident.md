@@ -463,13 +463,13 @@ Cột v1 nằm ở Phiếu B mục B8; không sửa cột đó.
 |---|---|
 | Commit ký tiêu chí | 4856d0bb90c621cfc80f6f1a48850db957b45006 (giống B8); hash tiêu chí 446d401cddbe, không đổi |
 | Hash chốt cổng vòng 1 | 5e68e88d (giống B8), grade xác nhận còn nguyên |
-| Mã lần chạy dùng làm bằng chứng | S8 base `R-S8-before-20261118-172937-d6d69c` · prepared `R-S8-prepared-20261118-172937-d6d69c` · after `R-S8-after-20261118-172938-d6d69c`; grade `R-S8-grade-20261118-172933-d6d69c` |
+| Mã lần chạy dùng làm bằng chứng | S8 base `R-S8-before-20261118-185845-d6d69c` · prepared `R-S8-prepared-20261118-185846-d6d69c` · after `R-S8-after-20261118-185846-d6d69c`; grade `R-S8-grade-20261118-185843-d6d69c` |
 | Còn dòng "vượt trần" nào trong report? (hàng chờ, chi phí, ROI, trần tiền, pháp lý) | KHÔNG còn dòng vượt trần nào: 0 ca ùn, thời gian chờ tối đa 5.0 phút <= 60 phút; chi phí mỗi ticket 2.952đ <= 8.000đ đã ký và < 10.000đ làm tay; ROI 2.39 >= 0.3; tổng hoàn tự động 282.000đ <= ngân sách 2.000.000đ; hoàn sai = 0, lỗi oan hãng = 0, PII = 0; niềm tin nhân viên duyệt đạt (chuyển sang kiểm mẫu 10%) |
 | Kho hoặc hãng có số xấu nhất: ____. Nếu chỉ nhìn phân khúc này, quyết định có đổi không? *(Khối "theo kho và hãng" trong output `lab10.eval` / `lab10.grade`, hoặc mục `by_segment` trong `report.json`.)* | Kho DN đắt nhất ở after (3.200đ/ticket, vẫn thấp hơn nhiều so với làm tay 10.000đ và trần 8.000đ). Nếu chỉ nhìn phân khúc này, quyết định KHÔNG đổi vì mọi kho đều đạt tiêu chí kinh tế và an toàn |
 | Quyết định (khoanh một) | **Tiếp tục** (Mở pilot theo phạm vi đã ký kết vì toàn bộ 5 chỉ số bắt buộc đạt, không còn dòng vượt trần nào, ROI đạt 2.39, hàng chờ 0 ca ùn, nhân viên khôi phục lòng tin kiểm mẫu 10%) |
-| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | `R-S8-after-20261118-172938-d6d69c`: pass_rate=1.0 [1.0, 1.0], pass_k=1.0; hoàn sai = 0, lỗi oan hãng = 0, PII = 0 (đạt cả 5 chỉ số bắt buộc trên bộ S8) |
-| Bằng chứng 2 | `R-S8-grade-20261118-172933-d6d69c`: regression đạt, bộ nền pass_rate 0.9909 → 1.0; không có ca mới hỏng. Ca hợp lệ S8-05@11 vẫn được hoàn 230.000đ đúng quy định |
-| Bằng chứng 3 | `R-S8-after-20261118-172938-d6d69c`: 0 ca ùn, thời gian chờ tối đa 5.0 phút, chi phí 2.952đ/ticket (tiết kiệm ròng 366.479đ/ngày), ROI 2.39 >= 0.3; nhân viên kiểm lại giảm về 10% (kiểm mẫu), niềm tin nhân viên đạt |
+| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | `R-S8-after-20261118-185846-d6d69c`: pass_rate=1.0 [1.0, 1.0], pass_k=1.0; hoàn sai = 0, lỗi oan hãng = 0, PII = 0 (đạt cả 5 chỉ số bắt buộc trên bộ S8) |
+| Bằng chứng 2 | `R-S8-grade-20261118-185843-d6d69c`: regression đạt, bộ nền pass_rate 0.9909 → 1.0; không có ca mới hỏng. Ca hợp lệ S8-05@11 vẫn được hoàn 230.000đ đúng quy định |
+| Bằng chứng 3 | `R-S8-after-20261118-185846-d6d69c`: 0 ca ùn, thời gian chờ tối đa 5.0 phút, chi phí 2.952đ/ticket (tiết kiệm ròng 366.479đ/ngày), ROI 2.39 >= 0.3; nhân viên kiểm lại giảm về 10% (kiểm mẫu), niềm tin nhân viên đạt |
 | Khớp dòng nào trong `decision_rule` đã ký? | Dòng **Tiếp tục**: "Cả 5 chỉ số bắt buộc đạt trên bộ nền VÀ trên gói sự cố, chi phí mỗi ticket thấp hơn 8.000đ (rẻ hơn làm tay 10.000đ), ROI từ 0,3 trở lên, không ca nào bị ùn quá 60 phút, và report không còn vượt trần nào." |
 | Nếu Thu hẹp: cắt kho nào / còn bao nhiêu phần trăm / mấy người trực, và ticket bị cắt đi đâu | Không áp dụng vì đã đạt điều kiện Tiếp tục toàn bộ phạm vi 100% |
 | Nếu Cải tiến thêm: giả thuyết cụ thể (nhánh nào của fault tree) + hạn | Không áp dụng vì mọi chỉ số an toàn và vận hành đều đã đạt |
@@ -479,7 +479,7 @@ Cột v1 nằm ở Phiếu B mục B8; không sửa cột đó.
 
 **Chỉ ở v2**
 - Quyết định đổi hay giữ so với v1? Vì con số nào: Giữ quyết định **Tiếp tục** như định hướng ở v1 nhưng ở v2 có thêm bằng chứng thực nghiệm vững chắc trên gói sự cố S8: chi phí 2.952đ/ticket <= 8.000đ, ROI 2.39 >= 0.3, 0 ca ùn (giảm từ 36 ca ở prepared), thời gian chờ max 5.0 phút (giảm từ 216 phút ở prepared).
-- Report tự kiểm tra: mã lần chạy `R-S8-grade-20261118-172933-d6d69c` · visible xanh (đạt toàn bộ các trần và chỉ số), criteria xanh, integrity xanh, regression xanh, monitor xanh.
+- Report tự kiểm tra: mã lần chạy `R-S8-grade-20261118-185843-d6d69c` · visible xanh (đạt toàn bộ các trần và chỉ số), criteria xanh, integrity xanh, regression xanh, monitor xanh.
 - Cổng vòng 1 (mốc prepared) đã đỡ được gì trước khi bàn biết sự cố, và bỏ sót gì: Cổng vòng 1 đỡ được phần lớn số tiền hoàn sai (từ 6.845.000đ xuống 1.080.000đ) và lỗi oan hãng (từ 35 xuống 10); nhưng bỏ lọt kiểm tra scope và trạng thái approval dẫn đến mất niềm tin người duyệt (nhân viên kiểm tay 100%, 36 ca ùn, chi phí 11.216đ). Vòng 2 đã khắc phục triệt để bằng cách chặn dùng lại approval, kiểm tra chặt chẽ scope và bổ sung điều kiện khôi phục niềm tin (`decision_note: true`, `review_sampling_pct: 10`).
 - Report ghi "được phép cân nhắc Tiếp tục" hay "không đủ căn cứ"? Quyết định của bàn có khớp không: Report ghi rõ "Được phép cân nhắc 'Tiếp tục'". Quyết định của bàn khớp hoàn toàn với kết luận của report và tiêu chí đã ký.
 - Một thứ bộ thử hôm nay chưa đo, và nó ảnh hưởng quyết định ra sao: Bộ thử chưa mô phỏng độ trễ mạng thực tế và concurrency khi nhiều ca kiểm tra/thu hồi approval cùng lúc; cần bổ sung cơ chế khóa phân tán trong tuần đầu pilot thật.
