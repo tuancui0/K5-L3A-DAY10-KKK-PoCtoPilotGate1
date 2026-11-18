@@ -22,8 +22,8 @@
       "Cho tren 60 phut hoac co ca un: dung nhan them vao pilot, NV-HANH phan luong thu cong."
     ],
     "alert_channel": "Kenh noi bo #logix-pilot-alerts (de xuat, chua ket noi)",
-    "decision_note": false,
-    "review_sampling_pct": 0
+    "decision_note": true,
+    "review_sampling_pct": 10
   },
   "legal": {
     "pii_fields_blocked_to_third_party": [
