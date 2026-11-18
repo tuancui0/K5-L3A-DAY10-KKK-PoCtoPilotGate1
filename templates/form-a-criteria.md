@@ -24,8 +24,8 @@ rồi mới chạy đánh giá. Khối 1 không sửa code.
 
 ### Câu 1.2 · Mục tiêu nhìn từ hai người
 
-- Chị Oanh, kế toán đối soát (không dùng trợ lý, nhưng phải khớp sổ với hãng và shop mỗi tuần): …
-- Chị Hạnh, trưởng ca CSKH (phải duyệt những ca trợ lý chuyển sang): …
+- Chị Oanh, kế toán đối soát (không dùng trợ lý, nhưng phải khớp sổ với hãng và shop mỗi tuần): Mọi khoản hoàn tiền và lỗi ghi cho hãng vận chuyển mà trợ lý tạo ra phải chính xác về số tiền, đúng đơn hàng, đúng hãng chịu trách nhiệm – để cuối tuần khi đối soát sổ cái với hãng và shop, không có dòng nào bất khớp phải tra lại thủ công.
+- Chị Hạnh, trưởng ca CSKH (phải duyệt những ca trợ lý chuyển sang): Các ca trợ lý chuyển sang duyệt phải đến đúng lúc, đủ thông tin (ghi chú giải thích, số tiền, lý do) để chị quyết định trong 10 phút/ca, hàng chờ duyệt không ùn quá SLA 60 phút – để chị không bị quá tải và khách không phải chờ lâu.
 
 ---
 
@@ -48,12 +48,12 @@ trợ lý có đang gây thiệt hại cho bên ngoài LogiX không; không có 
 
 | | Offline, cho MỘT bước (câu 1.3) | Telemetry production (câu 1.4) |
 |---|---|---|
-| **Bước / hành vi được đo** | | |
-| **Thước đo** (một câu, có đơn vị) | | |
-| **Dữ liệu** (lấy ở đâu, bao nhiêu, ai gán nhãn) | | |
-| **Cách tính** (công thức, mẫu số, cách xử lý ca thiếu dữ liệu) | | |
-| **Khung thời gian / ngưỡng báo động** | (không áp dụng) | |
-| **Điểm mù** (thước đo này KHÔNG thấy gì) | | |
+| **Bước / hành vi được đo** | | Hành vi ghi lỗi phạt hãng vận chuyển (`file_carrier_fault`) và thông báo cho bên thứ ba (`notify_carrier`). |
+| **Thước đo** (một câu, có đơn vị) | | Tỷ lệ khiếu nại từ hãng vận chuyển trên tổng số lỗi bị ghi (`carrier_dispute_rate`, tính bằng %), và số lượng cảnh báo không có nguyên nhân trễ hợp lệ (`unjustified_strikes_count`, số nguyên). |
+| **Dữ liệu** (lấy ở đâu, bao nhiêu, ai gán nhãn) | | Bảng log ghi nhận lỗi hãng trong ngày kết hợp với sự kiện đối soát từ cổng Webhook/API của đối tác hãng vận chuyển (VNX, GHSH...). |
+| **Cách tính** (công thức, mẫu số, cách xử lý ca thiếu dữ liệu) | | Tổng số lỗi bị hãng khiếu nại chia cho tổng số lỗi trợ lý đã ghi trong ca; trường hợp thiếu dữ liệu đối soát thì tạm tính là 0 và gắn cờ cảnh báo rà soát thủ công. |
+| **Khung thời gian / ngưỡng báo động** | (không áp dụng) | Quét mỗi 4 giờ một lần; nếu trong 1 ngày có ≥ 1 lỗi bị khiếu nại đúng hoặc ≥ 2 lỗi ghi cho cùng 1 hãng (chạm trần `ops_limits`) thì kích hoạt báo động ĐỎ. |
+| **Điểm mù** (thước đo này KHÔNG thấy gì) | | Không phát hiện được trường hợp hãng vận chuyển bị phạt oan nhưng họ chưa kịp đối soát hoặc tài xế âm thầm chịu phạt mà không khiếu nại lên hệ thống. |
 
 **Ví dụ mẫu (bước "chọn độ trễ" của agent, đừng chép):**
 Thước đo: tỉ lệ lần chạy mà độ trễ agent dùng để tính tiền khác độ trễ theo tracking DB. Dữ liệu: sự kiện `proposal.delay_days_used`
@@ -145,8 +145,13 @@ git add config/acceptance_criteria.json config/acceptance_criteria.lock && git c
 
 | Mục | Điền |
 |---|---|
-| Đã ký lúc (giờ máy in hoặc `signed_at` trong `config/acceptance_criteria.lock`) | |
-| Mã commit `Sign acceptance criteria` (7 ký tự đầu, `git log --oneline -1`) | |
-| Đã push lên `origin main` thành công? | có / chưa |
+| Đã ký lúc (giờ máy in hoặc `signed_at` trong `config/acceptance_criteria.lock`) | 2026-11-18T14:52:52 |
+| Mã commit `Sign acceptance criteria` (7 ký tự đầu, `git log --oneline -1`) | 4856d0b |
+| Đã push lên `origin main` thành công? | có |
+
+**Ghi chú về người ký.** Trường `signed_by` trong file đã ký ghi "Trưởng nhóm KKK (vai Sản phẩm và kinh doanh)". Người thực hiện lệnh ký
+và đứng tên là trưởng nhóm (Kỹ sư cổng 1), ký **đại diện cho vai Sản phẩm và kinh doanh theo ủy quyền của cả bàn**; các ngưỡng
+trong file do cả bàn thống nhất. Vai Sản phẩm và kinh doanh chính thức của bàn là Vũ Quang Dũng (xem `TEAM.md`). File tiêu chí đã
+khoá bằng hash nên giữ nguyên dòng `signed_by`, không sửa sau khi ký.
 
 Sau bước này **không sửa** `config/acceptance_criteria.json`, kể cả mở rồi lưu lại bằng trình soạn thảo tự định dạng.
