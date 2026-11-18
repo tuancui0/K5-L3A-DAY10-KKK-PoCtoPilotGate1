@@ -1,6 +1,6 @@
 # Phiếu B · Đo, rủi ro, cổng vòng 1 và quyết định v1 · Khối 2A + 2B + chốt (phút 65–115)
 
-**Bàn:** ______
+**Bàn:** KKK (K5-L3A-DAY10-KKK-PoCtoPilotGate1)
 
 Tiêu chí đã ký ở Phiếu A. Từ phút 65 bàn mới được chạy trợ lý. Khối 2A (65–85) chưa sửa code hay config. Khối 2B (85–105) sửa
 `lab10/guards.py` và `config/operating_gates.json`. Phút 105–115 chốt cổng vòng 1 rồi viết quyết định v1. Sau phút 115 không sửa phiếu này
@@ -165,15 +165,15 @@ mà cả bàn chưa nghĩ tới, không phải tả lại nhánh đã biết.
 **Câu hỏi dẫn dắt:** tool nào tạo ra hậu quả không đảo ngược? Mỗi tham số của tool đó lấy từ đâu (ticket, DB, model tự suy)?
 Với mỗi guideword: hậu quả cho ai, hiện có gì ngăn, cần thêm gate ở tầng nào (phát hiện / chặn / giới hạn thiệt hại)?
 
-Tool chọn phân tích: `________________` (gợi ý: `issue_refund`, `file_carrier_fault`, `notify_carrier`)
+Tool chọn phân tích: `file_carrier_fault`
 
 | Tham số / dòng dữ liệu | Guideword | Lệch cụ thể (viết bằng dữ kiện của lab) | Hậu quả, cho ai | Hiện có gì ngăn? | Gate đề xuất + tầng |
 |---|---|---|---|---|---|
-| | WRONG | | | | |
-| | INVALID | | | | |
-| | INCOMPLETE | | | | |
-| | PERTURBED | | | | |
-| | INCAPABLE | | | | |
+| `delay_cause` | WRONG | Model lấy số ngày khách tự khai hoặc suy diễn `CARRIER` trong khi tracking DB ghi `CUSTOMER_ABSENT` (khách vắng nhà) hoặc `FORCE_MAJEURE` (bão lũ) | Hãng vận chuyển (VNX, GHSH) bị phạt tiền oan 100.000đ–150.000đ; tài xế bị trừ điểm và phạt chuyến | Chưa có kiểm tra chéo DB | `write_gate` kiểm tra `delay_cause` từ tracking DB phải là `CARRIER` mới cho ghi (Tầng: Chặn) |
+| `carrier_id` | INVALID | Trợ lý ghi lỗi phạt hãng nội bộ `LGX` (đội xe LogiX, `penalty_per_strike_vnd = 0`) hoặc hãng đối tác đã bị tạm ngừng chạy (`suspend_after_strikes_7d`) | Sai lệch dữ liệu quản trị nội bộ và sổ đối soát kế toán của chị Oanh | Chưa có kiểm tra trạng thái hoạt động của hãng | `write_gate` từ chối ghi lỗi nếu `carrier_id == "LGX"` hoặc hãng đang trong diện tạm đình chỉ (Tầng: Chặn) |
+| `parcel_id` | INCOMPLETE | Đơn nhiều kiện (như đơn `O-1013` gồm kiện P1 giao bởi GHSH, kiện P2 giao bởi LGX), trợ lý ghi lỗi nhưng thiếu `parcel_id` hoặc gán nhầm kiện của hãng khác | Hãng vận chuyển từ chối nhận lỗi khi đối soát vì không rõ kiện nào vi phạm; tài xế bị phạt oan | Chưa phân biệt chi tiết từng kiện của đơn hàng | `write_gate` bắt buộc `parcel_id` phải tồn tại trong danh sách kiện của đơn và thuộc đúng `carrier_id` đó (Tầng: Chặn) |
+| `ticket_content` | PERTURBED | Khách hàng gõ nội dung cố ý đổ lỗi hãng: "Tài xế không gọi đã bỏ đi" nhằm ép phạt hãng để được hoàn tiền | Hãng vận chuyển bị ghi lỗi oan dù lịch sử cuộc gọi viễn thông chứng minh tài xế đã liên lạc | Chỉ dựa vào text khách gõ | Chuyển ca sang người duyệt (`Verdict.escalate`) khi có mâu thuẫn giữa lời khai khách và dữ liệu tracking/cuộc gọi (Tầng: Phát hiện & Vận hành) |
+| `api_carrier` | INCAPABLE | Cổng API ghi nhận phạt của đối tác hãng bị timeout hoặc quá tải trong giờ cao điểm | Lệnh ghi lỗi bị treo, retry lặp lại dẫn đến ghi trùng lỗi phạt hãng | Chưa có cơ chế idempotent key | Thêm `idempotency_key` cho mỗi lần gọi `file_carrier_fault` và giới hạn thời gian chờ timeout (Tầng: Giới hạn thiệt hại) |
 
 Không bắt buộc điền đủ năm dòng. Bắt buộc: **ít nhất ba dòng, trong đó một dòng là nhánh bàn chưa thấy trên trace**.
 
@@ -188,8 +188,9 @@ Không bắt buộc điền đủ năm dòng. Bắt buộc: **ít nhất ba dòn
 
 | Thành phần | Guideword | Lệch cụ thể | Hậu quả, cho ai | Cổng đề xuất: code hay con số nào trong `config/operating_gates.json` |
 |---|---|---|---|---|
-| | | | | |
-| | | | | |
+| **Người duyệt** (vận hành) | INCAPABLE | Ca trực chỉ có 1 người (`reviewers_on_shift = 1`), 15–20 ca dồn về trong giờ cao điểm, vượt quá công suất 6 ca/giờ | Hàng chờ duyệt ùn ứ, ca cuối chờ vượt quá SLA 60 phút; khách hàng bức xúc khiếu nại | `operations.reviewers_on_shift` cấu hình tăng lên 2 người vào giờ cao điểm, và đặt `operations.max_queue_wait_minutes = 60` |
+| **Dữ liệu gửi bên thứ ba** (pháp lý) | PERTURBED | Nội dung gửi cho hãng vận chuyển (`notify_carrier`) bị chèn số điện thoại, tên hoặc địa chỉ nhà riêng của khách | Rò rỉ dữ liệu cá nhân (PII), LogiX vi phạm pháp luật bảo vệ dữ liệu và mất uy tín | `legal.pii_fields_blocked_to_third_party` cấu hình `["phone", "street", "name"]` để lọc bỏ trường nhạy cảm |
+| **Ngân sách** (kinh doanh) | WRONG | Số tiền hoàn và số lỗi hãng ghi tự động vượt quá trần ngân sách Finance cho phép trong ngày | Vượt ngân sách dự phòng, phòng Tài chính - Kế toán từ chối giải ngân | `business.daily_refund_cap_vnd` và `ops_limits.max_auto_strikes_per_carrier_per_day = 2` |
 
 **Ví dụ mẫu (`issue_refund`, đừng chép):** tham số `amount_vnd` · WRONG · số tiền tính từ số ngày khách tự khai · LogiX mất
 tiền, hãng bị kéo theo một lỗi · hiện chỉ có trần "không vượt tổng tiền đơn" · cổng ghi so với quyền lợi tính từ DB (chặn).
@@ -208,15 +209,15 @@ Trạng thái: **Xong** (có bằng chứng) · **Chưa** · **Không áp dụng
 
 | # | Nhóm việc | Bằng chứng lấy từ đâu (đã có sẵn trong lab) | Mục cần kiểm tra | Trạng thái | Bằng chứng | PIC |
 |---|---|---|---|---|---|---|
-| 1 | Chất lượng | Report `lab10.eval` (mã lần chạy) + bảng soát lỗi (Phiếu B mục B2) | | | | |
-| 2 | Dữ liệu | Bản đồ dữ liệu (Phiếu B mục B3, câu 2.3): trường nào là nguồn sự thật, trường nào là bản sao | | | | |
-| 3 | Bảo mật | Một vòng HAZOP với guideword PERTURBED (Phiếu B mục B4): chữ nào đi vào model mà không do LogiX viết | | | | |
-| 4 | Quyền hạn | `config/switches.json` + guard trước lệnh ghi; thẻ S2, S8 có thêm mục mức kiểm soát (Phiếu C mục C3) | | | | |
-| 5 | Hiệu năng, hạ tầng | Đội tự ước tính; HAZOP guideword INCAPABLE: LLM không trả lời thì sao; số người duyệt và số ca mỗi giờ | | | | |
-| 6 | Chi phí | Khối "kinh doanh và vận hành" của report: chi phí mỗi ticket so với làm tay, ROI, tiền LLM ticket đắt nhất; `config/operating_gates.json` mục `business` | | | | |
-| 7 | Vận hành | Runbook (Phiếu B mục B7.5–B7.6) + `config/operating_gates.json` mục `operations` (PIC, người duyệt, số người trực, điều kiện dừng, kênh báo tin) + metric trong `monitors.py` | | | | |
-| 8 | Con người, pháp lý | Bên thứ ba (hãng, tài xế, shop, người nhận quà, người đứng tên duyệt); `config/operating_gates.json` mục `legal`; thẻ S6, S7, S8 có mục riêng ở Phiếu C mục C3 | | | | |
-| 9 | Quyết định | Câu tiêu chí (Phiếu A mục A4) + hash Bản tiêu chí đã ký + quyết định Gate 1 (Phiếu B mục B8, Phiếu C mục C12) | | | | |
+| 1 | Chất lượng | Report `lab10.eval` (mã lần chạy) + bảng soát lỗi (Phiếu B mục B2) | Tỷ lệ `pass_rate` và độ ổn định `pass_k` trên bộ nền 22 ticket | Xong | Mã lần chạy baseline trong `runs/journal.jsonl` | Đỗ Tuấn Anh |
+| 2 | Dữ liệu | Bản đồ dữ liệu (Phiếu B mục B3, câu 2.3): trường nào là nguồn sự thật, trường nào là bản sao | Phân định nguồn sự thật DB tracking với bản sao tự khai của khách | Xong | Phiếu B, mục B3 (Bản đồ dữ liệu) | Vũ Quang Dũng |
+| 3 | Bảo mật | Một vòng HAZOP với guideword PERTURBED (Phiếu B mục B4): chữ nào đi vào model mà không do LogiX viết | Chặn trích xuất và rò rỉ dữ liệu cá nhân (PII) sang bên thứ ba | Xong | Phiếu B mục B4 (HAZOP PERTURBED) | Phạm Tuấn Anh |
+| 4 | Quyền hạn | `config/switches.json` + guard trước lệnh ghi; thẻ S2, S8 có thêm mục mức kiểm soát (Phiếu C mục C3) | Khả năng tắt tức thời từng tool ghi và kiểm soát quyền hạn mức duyệt | Xong | `config/switches.json` và hàm `write_gate` trong `guards.py` | Nguyễn Tiến Khoa |
+| 5 | Hiệu năng, hạ tầng | Đội tự ước tính; HAZOP guideword INCAPABLE: LLM không trả lời thì sao; số người duyệt và số ca mỗi giờ | SLA hàng chờ duyệt ≤ 60 phút và năng suất 6 ca/người/giờ | Xong | Mục B4 (HAZOP INCAPABLE) và `data/world.json` (`ops_facts`) | Đỗ Tuấn Anh |
+| 6 | Chi phí | Khối "kinh doanh và vận hành" của report: chi phí mỗi ticket so với làm tay, ROI, tiền LLM ticket đắt nhất; `config/operating_gates.json` mục `business` | Chi phí mỗi ticket ≤ 8.000đ và ROI dự kiến ≥ 0.3 | Xong | `report.json` mục kinh doanh và `config/acceptance_criteria.json` | Vũ Quang Dũng |
+| 7 | Vận hành | Runbook (Phiếu B mục B7.5–B7.6) + `config/operating_gates.json` mục `operations` (PIC, người duyệt, số người trực, điều kiện dừng, kênh báo tin) + metric trong `monitors.py` | Runbook quy trình xử lý sự cố, phân công trực ca và quy trình dừng khẩn cấp | Xong | Phiếu B mục B7.5–B7.6 và `config/operating_gates.json` | Phạm Tuấn Anh |
+| 8 | Con người, pháp lý | Bên thứ ba (hãng, tài xế, shop, người nhận quà, người đứng tên duyệt); `config/operating_gates.json` mục `legal`; thẻ S6, S7, S8 có mục riêng ở Phiếu C mục C3 | Điều kiện ghi lỗi hãng hợp lệ và chặn gửi PII cho bên thứ ba | Xong | Cấu hình mục `legal` trong `config/operating_gates.json` | Phạm Tuấn Anh |
+| 9 | Quyết định | Câu tiêu chí (Phiếu A mục A4) + hash Bản tiêu chí đã ký + quyết định Gate 1 (Phiếu B mục B8, Phiếu C mục C12) | Tiêu chí chấp nhận đã ký kết và được khoá hash bảo vệ | Xong | `config/acceptance_criteria.lock` (commit `4856d0b`) | Vũ Quang Dũng |
 
 Ô "Chưa" có rủi ro cao → chuyển thành một dòng Risk register (Phiếu C mục C10).
 
