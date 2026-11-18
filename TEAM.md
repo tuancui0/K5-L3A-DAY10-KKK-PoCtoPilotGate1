@@ -53,12 +53,14 @@ Vận hành và pháp lý: câu 1.2, 1.4 (Phiếu A); HAZOP ngoài kỹ thuật 
 - Đã có câu trả lời 1.2 và 1.4 trong Phiếu A.
 - Hoàn thiện B7.5–B7.6: phân công nhân viên mô phỏng, cảnh báo, dừng/bật lại và kế hoạch giờ cao điểm; đồng bộ operations/legal trong config.
 - Rà soát HAZOP ngoài kỹ thuật và checklist B5: phân biệt kịch bản dự phòng với số đo, sửa tên trường cần lọc, ghi rõ bằng chứng còn chờ; không xác nhận Xong khi chưa có report.
-- Điền tên nhóm/thành viên trong submission.json theo TEAM.md; để trống thẻ, quyết định và ba câu cuối tới khi có bằng chứng và quyết định chung.
+- Điền tên nhóm/thành viên trong submission.json theo TEAM.md và ghi nhận thẻ S8 theo xác nhận của nhóm; quyết định và ba câu cuối còn chờ bằng chứng và quyết định chung.
 - Có sử dụng trợ lý AI Codex để đọc hướng dẫn, soạn/rà nội dung trên và chỉnh file trên nhánh tuananh. Các con số vận hành là phương án cần bản thân và nhóm xem xét, giải thích, kiểm chứng trước khi chốt; chưa coi là kết quả pilot.
 
 ### Bằng chứng
 
 Phiếu A câu 1.2/1.4; Phiếu B B4 phần ngoài kỹ thuật, B5, B7.5–B7.6; config/operating_gates.json phần operations/legal; submission/submission.json phần team/members. Các chỉnh sửa mới chưa commit, chưa có run ID; bổ sung mã commit/report thực tế sau khi nhóm tích hợp và chạy.
+
+Đóng góp soạn Phiếu C cho S8: C3.4 (hiệu chỉnh lòng tin), một dòng hoàn trên hạn mức ở C3.1 Bước 2, C5 câu 3.3 (giả định môi trường), bản nháp HAZOP C4 và nhánh vận hành C6; Runbook 4–5 và danh sách bằng chứng cần nhận tại C11. Nội dung được soạn với Codex từ thẻ/dữ liệu S8 và phương án vận hành; phần giả thuyết, ngưỡng đề xuất và thông tin chờ trace/report được ghi rõ. Chưa nhận đã chạy S8, xác minh cổng hiện tại, diễn tập quy trình hoặc chứng minh kết quả after; các chỉnh sửa Phiếu C này chưa commit/push.
 
 Tổng hợp bổ sung A/B theo yêu cầu cả nhóm: đã điền metric offline 1.3, giải thích 1.5 và sửa cách đo telemetry 1.4; tích hợp B1–B3 và B7.1–B7.4 từ các nhánh với nguồn rõ ràng, business từ QuangDung khớp config; tổng hợp đủ bốn lăng kính B6. Những nội dung thuộc vai khác ghi nhận là tổng hợp nguồn/tham khảo, không nhận thay đóng góp hay chữ ký của thành viên. B8 còn chờ quyết định hợp lệ và chữ ký thật, report bản cấu hình cuối chưa có.
 
